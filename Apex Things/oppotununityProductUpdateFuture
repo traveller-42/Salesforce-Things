@@ -1,0 +1,28 @@
+public class oppotununityProductUpdateFuture { 
+    @future
+    public static void myFutureMethod(set<Id> setId){
+        //system.debug('Entered');
+        List<OpportunityLineItem> lst = new List<OpportunityLineItem>();
+        
+        List<Opportunity> fetchObj=[select id , (select id , Unit_Price__C , UnitPrice from OpportunityLineItems) from opportunity 
+                                    where id in : setId];
+        for(Opportunity op:fetchObj){
+            for(OpportunityLineItem lineItems:op.OpportunityLineItems){
+                if(lineItems.Unit_Price__c!=null)
+                   lineItems.UnitPrice=lineItems.Unit_Price__c;
+                else
+                   lineItems.UnitPrice=0;
+                
+                lst.add(lineItems); 
+                system.debug('Line Item '+lst); 
+
+            }
+            
+           
+        }
+        //system.debug(lst);
+       
+        update lst;
+        
+    }
+}

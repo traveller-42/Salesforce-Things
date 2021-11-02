@@ -1,0 +1,37 @@
+public class salesPriceUpdateHelperClass {
+
+public static void  salesPriceUpdateHelperClassMethod(List<OpportunityLineItem> updateWork,map<Id,OpportunityLineItem>nonUpdValues){
+set<Id> setOppId = new set<Id>();
+for(OpportunityLineItem oli :updateWork){
+    if(oli.Calculated_Sales_Price__c){
+        //system.debug('Id Of Set' +oli.OpportunityId );
+        if(Trigger.isInsert){
+            setOppId.add(oli.OpportunityId);
+        }
+        else{
+            if( (nonUpdValues.get(oli.Id).Frequency__c!=oli.Frequency__c)
+               || (nonUpdValues.get(oli.Id).Cost__c!=oli.Cost__c) 
+               || (nonUpdValues.get(oli.Id).Freight_Per_Filter__c!=oli.Freight_Per_Filter__c) 
+               || (nonUpdValues.get(oli.Id).Old_Price__c!=oli.Old_Price__c) 
+               || (nonUpdValues.get(oli.Id).Quantity!=oli.Quantity) 
+               || (nonUpdValues.get(oli.Id).Productivity_or_Filters_Hr__c	!=oli.Productivity_or_Filters_Hr__c	)
+               || (nonUpdValues.get(oli.Id).Calculated_Sales_Price__c!=oli.Calculated_Sales_Price__c) )
+            {
+                setOppId.add(oli.OpportunityId);
+            }
+            
+        }
+        
+    }
+    
+    /* if(oli.Unit_Price__c!=null)
+oli.UnitPrice=oli.Unit_Price__c;*/
+}
+
+
+if(!system.isFuture()&&!setOppId.isEmpty()){
+    oppotununityProductUpdateFuture.myFutureMethod(setOppId);            
+}    
+}
+
+}
